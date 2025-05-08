@@ -1,0 +1,11 @@
+{
+  "alpaca": {
+    "file_name": "alpaca_data_cleaned.json",
+    "columns": {
+      "instruction": "instruction",
+      "input": "input", 
+      "output": "output"
+    },
+    "formatting": "alpaca"
+  }
+}
