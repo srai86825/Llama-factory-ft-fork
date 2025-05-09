@@ -1,10 +1,12 @@
 {
   "qa_tool_dataset": {
     "file_name": "sample_dataset.json",
-    "columns": {
-      "conversations": "conversations"
-    },
+    "formatting": "sharegpt",
     "messages": "conversations",
-    "formatting": "sharegpt"
+    "role_tag": "from",
+    "content_tag": "value",
+    "user_tag": "human",
+    "assistant_tag": "gpt",
+    "system_tag": "system"
   }
 }

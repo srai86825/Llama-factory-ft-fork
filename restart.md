@@ -29,3 +29,7 @@ root@8d0d1ff6f199:/workspace/Llama-factory-ft-fork# find /workspace/Llama-factor
 /workspace/Llama-factory-ft-fork/data/qa_tool_dataset/dataset_info.json
 /workspace/Llama-factory-ft-fork/data/dataset_info.json
 root@8d0d1ff6f199:/workspace/Llama-factory-ft-fork# 
+
+
+## 2. Tmux scroll
+echo "set -g mouse on" >> ~/.tmux.conf && tmux source-file ~/.tmux.conf
