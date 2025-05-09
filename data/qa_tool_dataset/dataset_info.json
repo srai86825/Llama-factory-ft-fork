@@ -1,6 +1,6 @@
 {
   "qa_tool_dataset": {
-    "file_name": "sample_dataset.json",
+    "file_name": "dataset.json",
     "formatting": "sharegpt",
     "messages": "conversations",
     "role_tag": "from",

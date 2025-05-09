@@ -133,7 +133,7 @@ def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: str) -> li
                         "formatting": "sharegpt"
                     },
                     "qa_tool_dataset": {
-                        "file_name": "sample_dataset.json",
+                        "file_name": "dataset.json",
                         "columns": {
                             "conversations": "conversations"
                         },
@@ -181,7 +181,7 @@ def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: str) -> li
                 print(f"Added missing 'sharegpt' definition to dataset_info.")
             elif name == "qa_tool_dataset":
                 dataset_info["qa_tool_dataset"] = {
-                    "file_name": "sample_dataset.json",
+                    "file_name": "dataset.json",
                     "columns": {
                         "conversations": "conversations"
                     },
