@@ -5,7 +5,7 @@ import os
 input_file = "dataset.json"
 output_file = "alpaca_data_cleaned.json"
 
-def convert_dataset():
+def convert_to_sharegpt():
     try:
         # Read original dataset
         print(f"Reading dataset from: {input_file}")
@@ -13,112 +13,93 @@ def convert_dataset():
             data = json.load(f)
         
         print(f"Dataset loaded. Type: {type(data)}, Length: {len(data) if isinstance(data, list) else 'N/A'}")
-        if isinstance(data, list) and len(data) > 0:
-            print(f"First item structure: {json.dumps(data[0], indent=2)[:500]}...")
         
-        # Convert to alpaca format
-        alpaca_data = []
+        # Convert to ShareGPT format
+        sharegpt_data = []
         
         for idx, item in enumerate(data):
             print(f"Processing item {idx}...")
             
-            # Case for dataset with "messages" array (OpenAI format)
+            # Handle dataset with "messages" array (OpenAI format)
             if "messages" in item:
+                conversations = []
                 messages = item["messages"]
                 print(f"  Found messages array with {len(messages)} messages")
-                
-                # Extract user and assistant messages
-                user_content = ""
-                assistant_content = ""
                 
                 for msg in messages:
                     role = msg.get("role")
                     content = msg.get("content")
                     
-                    if role == "user":
-                        # Handle multimodal content
-                        if isinstance(content, list):
-                            parts = []
-                            for part in content:
-                                if part.get("type") == "text":
-                                    parts.append(part.get("text", ""))
-                                elif part.get("type") == "image_url":
-                                    image_tag = f"<img>{part.get('image_url', '')}</img>"
-                                    parts.append(image_tag)
-                            user_content = "\n".join(parts)
-                        else:
-                            user_content = content
+                    # Map OpenAI roles to ShareGPT roles
+                    from_role = {
+                        "system": "system",
+                        "user": "human",
+                        "assistant": "gpt"
+                    }.get(role, role)
                     
-                    elif role == "assistant":
-                        assistant_content = content
+                    # Handle multimodal content
+                    if isinstance(content, list):
+                        parts = []
+                        for part in content:
+                            if part.get("type") == "text":
+                                parts.append(part.get("text", ""))
+                            elif part.get("type") == "image_url":
+                                image_tag = f"<img>{part.get('image_url', '')}</img>"
+                                parts.append(image_tag)
+                        content_value = "\n".join(parts)
+                    else:
+                        content_value = content
+                    
+                    # Add to conversations
+                    conversations.append({
+                        "from": from_role,
+                        "value": content_value
+                    })
                 
-                # Only add if we have both user and assistant content
-                if user_content and assistant_content:
-                    alpaca_item = {
-                        "instruction": user_content,
-                        "input": "",
-                        "output": assistant_content
+                # Only add if we have conversations
+                if conversations:
+                    sharegpt_item = {
+                        "conversations": conversations
                     }
-                    alpaca_data.append(alpaca_item)
-                    print(f"  ✓ Added alpaca entry with instruction: '{user_content[:50]}...' and output: '{assistant_content[:50]}...'")
+                    sharegpt_data.append(sharegpt_item)
+                    print(f"  ✓ Added ShareGPT entry with {len(conversations)} messages")
             
-            # Case for dataset with "conversations" array
+            # Handle dataset with "conversations" array (already in ShareGPT format)
             elif "conversations" in item:
-                conversations = item["conversations"]
-                print(f"  Found conversations array with {len(conversations)} messages")
-                
-                # Extract human and assistant messages
-                human_msg = ""
-                assistant_msg = ""
-                
-                for msg in conversations:
-                    if msg.get("from") == "human":
-                        human_msg = msg.get("value", "")
-                    elif msg.get("from") == "gpt":
-                        assistant_msg = msg.get("value", "")
-                
-                # Only add if we have both human and assistant messages
-                if human_msg and assistant_msg:
-                    alpaca_item = {
-                        "instruction": human_msg,
-                        "input": "",
-                        "output": assistant_msg
-                    }
-                    alpaca_data.append(alpaca_item)
-                    print(f"  ✓ Added alpaca entry with instruction: '{human_msg[:50]}...' and output: '{assistant_msg[:50]}...'")
+                sharegpt_data.append(item)
+                print(f"  ✓ Item already in ShareGPT format with {len(item['conversations'])} messages")
         
         # If no items were converted, create a sample dataset
-        if len(alpaca_data) == 0:
+        if len(sharegpt_data) == 0:
             print("No items were properly converted. Adding fallback examples.")
-            alpaca_data = [
+            sharegpt_data = [
                 {
-                    "instruction": "What is shown in this image?<img>https://example.com/sample.jpg</img>",
-                    "input": "",
-                    "output": "The image shows a mountain landscape with a lake and trees in the foreground."
+                    "conversations": [
+                        {"from": "system", "value": "You are a helpful visual assistant."},
+                        {"from": "human", "value": "What is shown in this image?<img>https://example.com/sample.jpg</img>"},
+                        {"from": "gpt", "value": "The image shows a mountain landscape with a lake and trees in the foreground."}
+                    ]
                 },
                 {
-                    "instruction": "Describe what you see in this chart.<img>https://example.com/chart.jpg</img>",
-                    "input": "",
-                    "output": "This is a bar chart showing sales data for different product categories. The 'Electronics' category has the highest sales."
-                },
-                {
-                    "instruction": "Look at this image and tell me what tools you can identify.<img>https://example.com/tools.jpg</img>",
-                    "input": "",
-                    "output": "I can see three tools: a hammer, a screwdriver, and a wrench. The hammer is red, the screwdriver is yellow, and the wrench is silver."
+                    "conversations": [
+                        {"from": "system", "value": "You are a helpful visual assistant."},
+                        {"from": "human", "value": "Describe what you see in this chart.<img>https://example.com/chart.jpg</img>"},
+                        {"from": "gpt", "value": "This is a bar chart showing sales data for different product categories. The 'Electronics' category has the highest sales."}
+                    ]
                 }
             ]
-            print(f"Added {len(alpaca_data)} fallback examples")
+            print(f"Added {len(sharegpt_data)} fallback examples")
         
         # Write the result to file
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(alpaca_data, f, ensure_ascii=False, indent=2)
+            json.dump(sharegpt_data, f, ensure_ascii=False, indent=2)
         
-        print(f"Converted {len(alpaca_data)} examples and saved to {output_file}")
+        print(f"Converted {len(sharegpt_data)} examples and saved to {output_file}")
         
         # Print a sample to verify
-        if len(alpaca_data) > 0:
+        if len(sharegpt_data) > 0:
             print("\nSample entry:")
-            print(json.dumps(alpaca_data[0], indent=2))
+            print(json.dumps(sharegpt_data[0], indent=2))
         
     except Exception as e:
         import traceback
@@ -126,4 +107,4 @@ def convert_dataset():
         print(traceback.format_exc())
 
 if __name__ == "__main__":
-    convert_dataset()
+    convert_to_sharegpt()

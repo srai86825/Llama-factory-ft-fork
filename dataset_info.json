@@ -9,7 +9,7 @@
     "formatting": "alpaca"
   },
   "qa_tool_dataset": {
-    "file_name": "dataset.json",
+    "file_name": "sample_dataset.json",
     "columns": {
       "conversations": "conversations"
     },

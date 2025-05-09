@@ -125,12 +125,19 @@ def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: str) -> li
                         },
                         "formatting": "alpaca"
                     },
-                    "qa_tool_dataset": {
-                        "file_name": "dataset.json",
+                    "sharegpt": {
+                        "file_name": "sharegpt_data.json",
                         "columns": {
                             "conversations": "conversations"
                         },
-                        "formatting": "alpaca"
+                        "formatting": "sharegpt"
+                    },
+                    "qa_tool_dataset": {
+                        "file_name": "sample_dataset.json",
+                        "columns": {
+                            "conversations": "conversations"
+                        },
+                        "formatting": "sharegpt"
                     }
                 }
                 print(f"Cannot open {config_path} due to {str(err)}. Using default dataset definitions.")
@@ -163,13 +170,22 @@ def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: str) -> li
                     "formatting": "alpaca"
                 }
                 print(f"Added missing 'alpaca' definition to dataset_info.")
-            elif name == "qa_tool_dataset":
-                dataset_info["qa_tool_dataset"] = {
-                    "file_name": "dataset.json",
+            elif name == "sharegpt":
+                dataset_info["sharegpt"] = {
+                    "file_name": "sharegpt_data.json",
                     "columns": {
                         "conversations": "conversations"
                     },
-                    "formatting": "alpaca"
+                    "formatting": "sharegpt"
+                }
+                print(f"Added missing 'sharegpt' definition to dataset_info.")
+            elif name == "qa_tool_dataset":
+                dataset_info["qa_tool_dataset"] = {
+                    "file_name": "sample_dataset.json",
+                    "columns": {
+                        "conversations": "conversations"
+                    },
+                    "formatting": "sharegpt"
                 }
                 print(f"Added missing 'qa_tool_dataset' definition to dataset_info.")
             else:

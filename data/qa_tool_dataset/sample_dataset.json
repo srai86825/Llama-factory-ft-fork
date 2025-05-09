@@ -1,0 +1,11 @@
+[
+    {
+      "conversations": [
+        {"from": "system", "value": "You are a helpful assistant."},
+        {"from": "human", "value": "What is shown in this image?<img>https://example.com/sample1.jpg</img>"},
+        {"from": "gpt", "value": "The image shows a mountain landscape with a lake and trees in the foreground."},
+        {"from": "human", "value": "Describe the colors in the image."},
+        {"from": "gpt", "value": "The image features vibrant blue water in the lake, deep green trees, and gray rocky mountains with white snow-capped peaks. The sky is a clear light blue with a few white clouds."}
+      ]
+    }
+]

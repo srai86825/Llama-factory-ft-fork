@@ -1,11 +1,10 @@
 {
-  "alpaca": {
-    "file_name": "alpaca_data_cleaned.json",
+  "qa_tool_dataset": {
+    "file_name": "sample_dataset.json",
     "columns": {
-      "instruction": "instruction",
-      "input": "input", 
-      "output": "output"
+      "conversations": "conversations"
     },
-    "formatting": "alpaca"
+    "messages": "conversations",
+    "formatting": "sharegpt"
   }
 }

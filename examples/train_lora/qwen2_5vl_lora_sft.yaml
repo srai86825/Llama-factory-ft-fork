@@ -12,7 +12,7 @@ lora_rank: 8
 lora_target: all
 
 ### dataset
-dataset: alpaca
+dataset: qa_tool_dataset
 dataset_dir: /workspace/Llama-factory-ft-fork/data/qa_tool_dataset
 template: qwen2_vl
 cutoff_len: 2048
