@@ -38,3 +38,4 @@ echo "set -g mouse on" >> ~/.tmux.conf && tmux source-file ~/.tmux.conf
 ## 3. Saving Ft model
 check /saves folder for script and usage
 
+https://huggingface.co/srai86825/qwen-vl-tool-assistant-lora
