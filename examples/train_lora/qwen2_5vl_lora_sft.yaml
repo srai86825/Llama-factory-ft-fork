@@ -13,7 +13,7 @@ lora_target: all
 
 ### dataset
 dataset: alpaca
-dataset_dir: /workspace/LLaMA-Factory/data/qa_tool_dataset
+dataset_dir: /workspace/Llama-factory-ft-fork/data/qa_tool_dataset
 template: qwen2_vl
 cutoff_len: 2048
 max_samples: 1000
